@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ratemy/screens/feed_screen.dart';
 import '../profile_screen.dart';
 
 class BottomBar extends StatelessWidget {
@@ -13,7 +14,7 @@ class BottomBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildButton(),
+        _buildButton(context),
         _buildCalendarButton(),
         _buildButton3(),
         _buildNotificationsButton(),
@@ -22,9 +23,11 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  _buildButton() {
+  _buildButton(BuildContext context) {
     return IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, FeedScreen.id);
+        },
         iconSize: iconSize * scaling,
         icon: const Icon(Icons.local_fire_department), color: iconColor,);
   }
