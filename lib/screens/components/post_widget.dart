@@ -6,6 +6,10 @@ import 'package:ratemy/screens/components/rate_button.dart';
 
 import '../presentation/feed_presentation.dart';
 import 'grade_star.dart';
+import 'package:ratemy/application/entity/comment.dart';
+import 'package:ratemy/screens/comments_screen.dart';
+import 'package:ratemy/screens/presentation/comments_presentation.dart';
+import 'package:ratemy/application/entity/user.dart';
 
 class PostWidget extends StatefulWidget {
   final FeedPresentation presentation;
@@ -160,7 +164,33 @@ class _PostWidgetState extends State<PostWidget> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CommentsScreen(
+          presentation: CommentsPresentation(
+            comments: [
+              Comment(
+                text: 'Merge joooon',
+                user: User(
+                  name: 'Stefan',
+                  profileImage: 'https://picsum.photos/id/1011/50/50',
+                ),
+              ),
+              Comment(
+                text: 'Hai Dinamo',
+                user: User(
+                  name: 'Dave',
+                  profileImage: 'https://picsum.photos/id/1012/50/50',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+            },
             iconSize: 40 * scalingFactor,
             icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
 

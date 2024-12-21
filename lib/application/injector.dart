@@ -37,7 +37,7 @@ class Injector {
   ProfilePresentation getProfilePresentation() {
     final user = User(
     name: 'Greg',
-    profileImage: 'https://picsum.photos/id/237/200/300',
+    profileImage: 'https://picsum.photos/id/69/200/300',
   );
 
   user.posts.addAll([
