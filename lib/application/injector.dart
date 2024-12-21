@@ -1,6 +1,6 @@
 import 'package:ratemy/screens/presentation/login_presentation.dart';
 import 'package:ratemy/screens/presentation/profile_presentation.dart';
-
+import 'package:ratemy/application/entity/user.dart';
 import '../framework/api_service.dart';
 import '../screens/presentation/feed_presentation.dart';
 
@@ -34,8 +34,10 @@ class Injector {
 
   ProfilePresentation getProfilePresentation() {
     return ProfilePresentation(
-      userName: 'Greg', // Replace with actual or mock data
-      profilePictureUrl: 'assets/example_profile_image.jpeg', // Replace with an actual image URL or asset
+      user: User(
+        name: 'Greg',
+        profileImage: 'assets/example_profile_image.jpeg',
+      )
     );
   }
 }

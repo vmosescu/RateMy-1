@@ -1,11 +1,15 @@
+import 'dart:ui';
+
 import 'package:ratemy/screens/presentation/presentation.dart';
+import 'package:ratemy/application/entity/user.dart';
 
 class ProfilePresentation extends Presentation {
-  final String userName;
-  final String profilePictureUrl;
+  User user;
+
+  @override
+  get background => const Color.fromARGB(255, 27, 27, 1);
 
   ProfilePresentation({
-    required this.userName,
-    required this.profilePictureUrl,
+    required this.user
   });
 }

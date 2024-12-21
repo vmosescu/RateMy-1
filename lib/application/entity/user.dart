@@ -1,6 +1,15 @@
 class User {
-  final String name;
-  final String profileImage;
-
-  const User({required this.name, required this.profileImage});
+  String name;
+  String profileImage;
+  int postsNumber;
+  int following;
+  int followers;
+   
+  User({
+    required this.name,
+    required this.profileImage,
+    this.postsNumber = 0,
+    this.followers = 0,
+    this.following = 0
+  });
 }

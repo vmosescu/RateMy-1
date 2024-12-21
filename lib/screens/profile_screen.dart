@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/presentation/profile_presentation.dart';
-
+import 'components/bottom_bar.dart';
 // import 'components/title_row.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,35 +17,116 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final sW = MediaQuery.sizeOf(context).width;
+    final sH = MediaQuery.sizeOf(context).height;
+    final double bottomBarH = sW * .3 > 60 ? 60 : sW * .3;
+    final double scalingFactor = sH > 700 ? 1 : sH / 700;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Profile Picture
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage(widget.presentation.profilePictureUrl),
-              onBackgroundImageError: (_, __) =>
-                  const Icon(Icons.person, size: 60),
-            ),
-            const SizedBox(height: 20),
-            // User Name
-            Text(
-              widget.presentation.userName,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      backgroundColor: widget.presentation.background,
+      body: Stack(
+        children: [
+          // Main content centered
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // Centers the content vertically
+                crossAxisAlignment: CrossAxisAlignment.center, // Aligns horizontally
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: NetworkImage(widget.presentation.user.profileImage),
+                    onBackgroundImageError: (_, __) =>
+                        const Icon(Icons.person, size: 60),
+                  ),
+                  const SizedBox(height: 20),
+                  // User Name
+                  Text(
+                    widget.presentation.user.name,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  // Stats Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            widget.presentation.user.postsNumber.toString(), // Random number
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                          ),
+                          const Text(
+                            'Photos',
+                            style: const TextStyle(
+                              color: Colors.white
+                            )
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            widget.presentation.user.followers.toString(), // Random number
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                          ),
+                          const Text('Followers',
+                            style: const TextStyle(
+                              color: Colors.white
+                            )
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            widget.presentation.user.following.toString(), // Random number
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                            ),
+                          ),
+                          const Text('Following',
+                            style: const TextStyle(
+                              color: Colors.white
+                            )
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          // Bottom bar
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: bottomBarH,
+              child: BottomBar(scaling: scalingFactor),
+            ),
+          ),
+        ],
       ),
+
+
+      
     );
   }
 }
