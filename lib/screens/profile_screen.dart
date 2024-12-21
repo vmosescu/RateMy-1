@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Column(
                         children: [
                           Text(
-                            widget.presentation.user.postsNumber.toString(), // Random number
+                            widget.presentation.user.posts.length.toString(), // Random number
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -108,8 +108,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 20),
                     ],
                   ),
+                  Expanded(
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(10),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // Number of items in a row
+                            crossAxisSpacing: 10, // Space between columns
+                            mainAxisSpacing: 10, // Space between rows
+                          ),
+                          itemCount: widget.presentation.user.posts.length,
+                          itemBuilder: (context, index) {
+                            final post = widget.presentation.user.posts[index];
+                            return Image.network(
+                              post.imageUrl,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        ),
+                      ),
                 ],
               ),
             ),
