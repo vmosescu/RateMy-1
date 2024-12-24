@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "93911371032",
+    "project_id": "ratemy-19c77",
+    "storage_bucket": "ratemy-19c77.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93911371032:android:241f6ff282a254fc82a26d",
+        "android_client_info": {
+          "package_name": "com.ratemy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ZSTQN02ZyyDrHforFlwzmap3GiysEzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93911371032:android:ee0c49f5832c181382a26d",
+        "android_client_info": {
+          "package_name": "com.ratemy.ratemy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ZSTQN02ZyyDrHforFlwzmap3GiysEzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
