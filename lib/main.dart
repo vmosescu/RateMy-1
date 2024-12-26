@@ -15,6 +15,8 @@ import 'package:ratemy/screens/user_screen.dart';
 
 import 'application/injector.dart';
 
+import 'dart:developer' as dev;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -67,13 +69,16 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            dev.log('connection waiting');
             return const SplashScreen();
           }
           if (snapshot.hasData) {
+            dev.log('snapshot has data');
             return FeedScreen(
               presentation: injector.getFeedPresentation(),
             );
           }
+          dev.log('must auth');
           return const AuthScreen();
         },
       ),

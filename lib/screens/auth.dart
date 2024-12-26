@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:ratemy/screens/widgets/user_image_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
 
@@ -32,7 +34,13 @@ class _AuthScreenState extends State<AuthScreen> {
     if (!isValid) {
       return;
     }
-
+    if (!_isLogin && _selectedImage == null) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image.')),
+      );
+      return;
+    }
 
     _form.currentState!.save();
 
@@ -44,14 +52,27 @@ class _AuthScreenState extends State<AuthScreen> {
         await _firebase.signInWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
       } else {
-        await _firebase.createUserWithEmailAndPassword(
+        final userCredentials = await _firebase.createUserWithEmailAndPassword(
             email: _enteredEmail, password: _enteredPassword);
 
-       }
-    } on FirebaseAuthException catch (error) {
-      if (error.code == 'email-already-in-use') {
-        //..
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child('${userCredentials.user!.uid}.jpg');
+
+        await storageRef.putFile(_selectedImage!);
+        final imageUrl = await storageRef.getDownloadURL();
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredentials.user!.uid)
+            .set({
+          'username': _enteredUsername,
+          'email': _enteredEmail,
+          'image_url': imageUrl,
+        });
       }
+    } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error.message ?? 'Authentication failed.')),
@@ -90,7 +111,13 @@ class _AuthScreenState extends State<AuthScreen> {
                         key: _form,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: [ 
+                          children: [
+                            if (!_isLogin)
+                              UserImagePicker(
+                                onPickImage: (pickedImage) {
+                                  _selectedImage = pickedImage;
+                                },
+                              ),
                             TextFormField(
                               decoration: const InputDecoration(
                                   labelText: 'Email Address'),
@@ -109,6 +136,22 @@ class _AuthScreenState extends State<AuthScreen> {
                                 _enteredEmail = value!;
                               },
                             ),
+                            if (!_isLogin)
+                              TextFormField(
+                                decoration: const InputDecoration(
+                                    labelText: 'Username'),
+                                enableSuggestions: false,
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.trim().length < 4) {
+                                    return 'Please enter at least 4 characters.';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  _enteredUsername = value!;
+                                },
+                              ),
                             TextFormField(
                               decoration:
                                   const InputDecoration(labelText: 'Password'),
@@ -132,12 +175,18 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Theme.of(context)
                                       .colorScheme
-                                      .primaryContainer,
+                                      .onPrimaryFixed,
                                 ),
                                 child: Text(_isLogin ? 'Login' : 'Signup'),
                               ),
                             if (!_isAuthenticating)
                               TextButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStatePropertyAll<Color>(
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryFixed)),
                                 onPressed: () {
                                   setState(() {
                                     _isLogin = !_isLogin;
