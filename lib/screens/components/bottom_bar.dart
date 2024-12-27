@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ratemy/screens/add_photo_screen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
 import '../profile_screen.dart';
 
@@ -18,7 +19,7 @@ class BottomBar extends StatelessWidget {
       children: [
         _buildButton(context),
         _buildCalendarButton(),
-        _buildButton3(),
+        _buildButton3(context),
         _buildNotificationsButton(),
         _buildProfileButton(context),
       ],
@@ -42,9 +43,11 @@ class BottomBar extends StatelessWidget {
       icon: const Icon(Icons.calendar_month), color: iconColor);
   }
 
-  _buildButton3() {
+  _buildButton3(BuildContext context) {
     return IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, AddPhotoScreen.id);
+        },
         iconSize: iconSize * scaling,
         icon: const Icon(Icons.outbox_outlined), color: iconColor);
   }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ratemy/screens/add_photo_screen.dart';
 import 'package:ratemy/screens/auth.dart';
 import 'package:ratemy/screens/splash.dart';
 import 'firebase_options.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
             ),
         FeedScreen.id: (context) => FeedScreen(
               presentation: injector.getFeedPresentation(),
+            ),
+        AddPhotoScreen.id: (context) => AddPhotoScreen(
+              presentation: injector.getAddPhotoPresentation(),
             ),
       },
       theme: AppTheme.getAppTheme(),

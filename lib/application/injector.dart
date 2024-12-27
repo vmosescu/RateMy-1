@@ -1,3 +1,4 @@
+import 'package:ratemy/screens/presentation/add_photo_presentation.dart';
 import 'package:ratemy/screens/presentation/login_presentation.dart';
 import 'package:ratemy/screens/presentation/profile_presentation.dart';
 import 'package:ratemy/application/entity/user.dart';
@@ -68,5 +69,9 @@ class Injector {
   ]);
 
   return ProfilePresentation(user: user);
+  }
+
+  AddPhotoPresentation getAddPhotoPresentation() {
+    return AddPhotoPresentation();
   }
 }
