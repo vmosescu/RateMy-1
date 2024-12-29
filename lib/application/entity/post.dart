@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ratemy/application/entity/user.dart';
 
 class Post {
@@ -5,8 +6,9 @@ class Post {
   final double pictureRating;
   final int userRating;
   final String imageUrl;
+  final Timestamp? postTimestamp;
 
-  const Post(this.user, this.pictureRating, this.userRating, this.imageUrl);
+  Post(this.user, this.pictureRating, this.userRating, this.imageUrl, {this.postTimestamp}) ;
 
   Post copyWith({double? pictureRating}) {
     return Post(

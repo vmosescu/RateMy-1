@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ratemy/screens/add_photo_screen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
+import 'package:ratemy/screens/feedmy_screen.dart';
 import '../profile_screen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,7 @@ class BottomBar extends StatelessWidget {
   _buildButton(BuildContext context) {
     return IconButton(
         onPressed: () {
-          Navigator.pushNamed(context, FeedScreen.id);
+          Navigator.pushNamed(context, FeedmyScreen.id);
         },
         iconSize: iconSize * scaling,
         icon: const Icon(Icons.local_fire_department), color: iconColor,);

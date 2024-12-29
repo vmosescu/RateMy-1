@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:ratemy/screens/feedmy_screen.dart';
 import 'package:ratemy/screens/presentation/add_photo_presentation.dart';
 import 'package:ratemy/screens/widgets/photo_input.dart';
 import 'components/bottom_bar.dart';
@@ -54,7 +55,8 @@ class _AddPhotoScreenState extends State<AddPhotoScreen> {
         'photo': photoUrl,
       });
 
-      Navigator.of(context).pop();
+      //Navigator.of(context).pop();
+      Navigator.pushNamed(context, FeedmyScreen.id);
 
     } on FirebaseException catch (error) {
       ScaffoldMessenger.of(context).clearSnackBars();

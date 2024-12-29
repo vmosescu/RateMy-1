@@ -10,6 +10,7 @@ import 'firebase_options.dart';
 
 import 'package:ratemy/screens/profile_screen.dart';
 import 'package:ratemy/screens/feed_screen.dart';
+import 'package:ratemy/screens/feedmy_screen.dart';
 import 'package:ratemy/screens/login_screen.dart';
 import 'package:ratemy/screens/presentation/app_theme.dart';
 import 'package:ratemy/screens/user_screen.dart';
@@ -55,6 +56,9 @@ class MyApp extends StatelessWidget {
         AddPhotoScreen.id: (context) => AddPhotoScreen(
               presentation: injector.getAddPhotoPresentation(),
             ),
+        FeedmyScreen.id: (context) => FeedmyScreen(
+              presentation: injector.getFeedPresentation(),
+            ),
       },
       theme: AppTheme.getAppTheme(),
       // onGenerateRoute: (settings) {
@@ -78,7 +82,7 @@ class MyApp extends StatelessWidget {
           }
           if (snapshot.hasData) {
             dev.log('snapshot has data');
-            return FeedScreen(
+            return FeedmyScreen(
               presentation: injector.getFeedPresentation(),
             );
           }
