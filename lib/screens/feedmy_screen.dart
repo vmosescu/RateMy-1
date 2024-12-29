@@ -122,14 +122,17 @@ class _FeedScreenState extends State<FeedmyScreen> {
 
       for (var doc in photos.docs) {
         User user = users[doc.get('userId')]!;
-        Post post = Post(user, 5.9, 0, doc.get('photo'),
-            postTimestamp: doc.get('createdAt'));
+        double photoRaiting = doc.data().containsKey('photoRaiting') ? doc.get('photoRaiting') : 0.0;
+        int raintingsNo = doc.data().containsKey('photoRaitingNo') ? doc.get('photoRaitingNo') : 0;
+        dev.log('photoRaiting=$photoRaiting raintingsNo=$raintingsNo docId=${doc.id}');
+        Post post = Post(user, photoRaiting, 0, doc.get('photo'),
+            postId: doc.id,
+            postTimestamp: doc.get('createdAt'),
+            raintingsNo: raintingsNo);
         _currentPosts.add(post);
       }
-      dev.log('1');
 
       _dataStreamController.add(_currentPosts);
-      dev.log('2');
     } catch (e) {
       dev.log('Error on fetching: $e');
       _dataStreamController.addError(e);
@@ -181,8 +184,7 @@ class _FeedScreenState extends State<FeedmyScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
-                    if (photoSnapshot.connectionState ==
-                        ConnectionState.done) {
+                    if (photoSnapshot.connectionState == ConnectionState.done) {
                       return const Center(
                         child: Text(
                           'No more photos.',

@@ -7,8 +7,11 @@ class Post {
   final int userRating;
   final String imageUrl;
   final Timestamp? postTimestamp;
+  final String? postId;
+  final int? raintingsNo;
 
-  Post(this.user, this.pictureRating, this.userRating, this.imageUrl, {this.postTimestamp}) ;
+  Post(this.user, this.pictureRating, this.userRating, this.imageUrl,
+      {this.postTimestamp, this.postId, this.raintingsNo});
 
   Post copyWith({double? pictureRating}) {
     return Post(

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ratemy/application/entity/post.dart';
 import 'package:ratemy/screens/components/rate_button.dart';
@@ -15,7 +16,8 @@ class PostmyWidget extends StatefulWidget {
   final FeedPresentation presentation;
   final Post post;
 
-  const PostmyWidget({super.key, required this.presentation, required this.post});
+  const PostmyWidget(
+      {super.key, required this.presentation, required this.post});
 
   @override
   State<PostmyWidget> createState() => _PostWidgetState();
@@ -38,7 +40,8 @@ class _PostWidgetState extends State<PostmyWidget> {
     post = PostView(widget.post);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox = _imageKey.currentContext!.findRenderObject() as RenderBox;
+      final RenderBox renderBox =
+          _imageKey.currentContext!.findRenderObject() as RenderBox;
       final iH = renderBox.size.height;
 
       final wH = _getHeight(context);
@@ -53,6 +56,21 @@ class _PostWidgetState extends State<PostmyWidget> {
     super.initState();
   }
 
+  void _updateRaiting(int grade) async {
+    int newRaitingsNo = widget.post.raintingsNo! + 1;
+    double newRaiting =
+        post.pictureRating + (grade - post.pictureRating) / newRaitingsNo;
+    final data = {'photoRaiting': newRaiting, 'photoRaitingNo': newRaitingsNo};
+    await FirebaseFirestore.instance
+        .collection('photos')
+        .doc(widget.post.postId!)
+        .set(data, SetOptions(merge: true));
+    post.pictureRating = newRaiting;
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final sW = MediaQuery.sizeOf(context).width;
@@ -63,8 +81,9 @@ class _PostWidgetState extends State<PostmyWidget> {
       children: [
         Column(
           children: [
-
-            SizedBox(height: 20 * scalingFactor,),
+            SizedBox(
+              height: 20 * scalingFactor,
+            ),
 
             // IMAGE
             Flexible(
@@ -78,7 +97,9 @@ class _PostWidgetState extends State<PostmyWidget> {
               ),
             ),
 
-            SizedBox(height: 20 * scalingFactor,),
+            SizedBox(
+              height: 20 * scalingFactor,
+            ),
 
             // TOOLS BUTTONS
             SizedBox(
@@ -98,42 +119,32 @@ class _PostWidgetState extends State<PostmyWidget> {
 
         // RATE BUTTON
         Positioned(
-          bottom : bottomPositionRateBtn,
+          bottom: bottomPositionRateBtn,
           right: 20,
           child: RateButton(
             presentation: widget.presentation,
             width: rateButtonWidth,
             userRating: post.userRating,
-            saveGrade: (grade) {
-              setState(() {
-                final updatedPictureRating = (widget.post.pictureRating * 10 + grade) / 11;
-                setState(() {
-                  post.pictureRating = (10 * updatedPictureRating).round() / 10;
-                  post.userRating = grade;
-                });
-              });
-            },
+            saveGrade: _updateRaiting,
           ),
         ),
-
 
         // PICTURE RATING
         Positioned(
             top: 30,
             left: 10,
-            child: GradeStar(grade: post.pictureRating, width: 70)
-        ),
+            child: GradeStar(grade: post.pictureRating, width: 70)),
       ],
     );
   }
 
   Widget _buildImage(String src) {
     return Image.network(
-        src,
-        gaplessPlayback: true,
-        errorBuilder: _onError,
-        fit: BoxFit.cover,
-      );
+      src,
+      gaplessPlayback: true,
+      errorBuilder: _onError,
+      fit: BoxFit.cover,
+    );
   }
 
   Widget _onError(BuildContext context, Object error, StackTrace? stackTrace) {
@@ -165,47 +176,57 @@ class _PostWidgetState extends State<PostmyWidget> {
           IconButton(
             onPressed: () {
               Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CommentsScreen(
-          presentation: CommentsPresentation(
-            comments: [
-              Comment(
-                text: 'Merge joooon',
-                user: User(
-                  name: 'Stefan',
-                  profileImage: 'https://picsum.photos/id/1011/50/50',
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CommentsScreen(
+                    presentation: CommentsPresentation(
+                      comments: [
+                        Comment(
+                          text: 'Merge joooon',
+                          user: User(
+                            name: 'Stefan',
+                            profileImage: 'https://picsum.photos/id/1011/50/50',
+                          ),
+                        ),
+                        Comment(
+                          text: 'Hai Dinamo',
+                          user: User(
+                            name: 'Dave',
+                            profileImage: 'https://picsum.photos/id/1012/50/50',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              Comment(
-                text: 'Hai Dinamo',
-                user: User(
-                  name: 'Dave',
-                  profileImage: 'https://picsum.photos/id/1012/50/50',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+              );
             },
             iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.insert_comment), color: widget.presentation.primary,),
+            icon: const Icon(Icons.insert_comment),
+            color: widget.presentation.primary,
+          ),
 
-          const SizedBox(width: 10,),
-
-          IconButton(
-            onPressed: () {},
-            iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.keyboard_return), color: widget.presentation.primary,),
-
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
 
           IconButton(
             onPressed: () {},
             iconSize: 40 * scalingFactor,
-            icon: const Icon(Icons.bookmark), color: widget.presentation.primary,),
+            icon: const Icon(Icons.keyboard_return),
+            color: widget.presentation.primary,
+          ),
+
+          const SizedBox(
+            width: 10,
+          ),
+
+          IconButton(
+            onPressed: () {},
+            iconSize: 40 * scalingFactor,
+            icon: const Icon(Icons.bookmark),
+            color: widget.presentation.primary,
+          ),
 
           // const RateButton(),
         ],
@@ -225,7 +246,11 @@ class _PostWidgetState extends State<PostmyWidget> {
             height: profileImageSize,
           ),
           const SizedBox(width: 10),
-          Text(widget.post.user.name, style: const TextStyle(color: Color.fromARGB(255, 225, 225, 225), fontSize: 18,))
+          Text(widget.post.user.name,
+              style: const TextStyle(
+                color: Color.fromARGB(255, 225, 225, 225),
+                fontSize: 18,
+              ))
         ],
       ),
     );
